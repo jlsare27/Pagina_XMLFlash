@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XMLFLASH — Descarga masiva de XML y validación SAT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F6F7FE;
+    --surface: #FFFFFF;
+    --surface-2: #EBEFFD;
+    --border: #D7DEFB;
+    --accent: #F4791D;
+    --accent-dim: #B85A0E;
+    --violet: #6266F0;
+    --violet-deep: #4645BD;
+    --text: #232323;
+    --muted: #5355D7;
+    --ok: #16A34A;
+    --bad: #DC2626;
+    --radius: 14px;
+
+    --bg-deep: #17163A;
+    --dark-surface: #211F52;
+    --dark-border: rgba(244,242,255,0.09);
+    --dark-text: #F4F2FF;
+    --dark-muted: #ABAFEA;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.55;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  button{font-family:inherit; border:none; background:none; color:inherit; cursor:pointer;}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:4px;}
+
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- NAV (nuevo color) ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background: #4645BD;
+    backdrop-filter: none;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:16px 24px;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:'Space Grotesk'; font-weight:700; font-size:1.15rem; color:#fff;}
+  .bolt{width:22px; height:22px; flex-shrink:0; fill:#FFC53D;}
+  .navlinks{display:flex; gap:28px; font-size:0.92rem; color: rgba(255,255,255,0.85);}
+  .navlinks a:hover{color: #fff;}
+  .nav-cta{
+    background: #fff;
+    color: #4645BD;
+    padding:9px 18px;
+    border-radius:100px;
+    font-weight:600;
+    font-size:0.88rem;
+    white-space:nowrap;
+    transition: background .2s;
+  }
+  .nav-cta:hover{background: #f0f0ff;}
+  .navlinks, .nav-cta{display:flex;}
+  @media (max-width:860px){ .navlinks{display:none;} }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:72px 0 60px;
+    background:
+      radial-gradient(700px 420px at 85% -10%, rgba(124,92,255,0.35), transparent 60%),
+      radial-gradient(500px 300px at 10% 110%, rgba(255,197,61,0.12), transparent 60%);
+    overflow:hidden;
+  }
+  .hero-grid{display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:start;}
+  @media (max-width:960px){ .hero-grid{grid-template-columns:1fr;} }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono'; font-size:0.76rem; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--accent); background:rgba(255,197,61,0.08); border:1px solid rgba(255,197,61,0.25);
+    padding:6px 12px; border-radius:100px; margin-bottom:22px;
+  }
+  .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--ok); box-shadow:0 0 0 3px rgba(51,217,178,0.2);}
+  .hero h1{font-size:clamp(2.1rem, 4.4vw, 3.35rem); line-height:1.08; margin-bottom:20px;}
+  .hero h1 .hl{color:var(--accent);}
+  .hero p.lead{font-size:1.08rem; color:var(--muted); max-width:520px; margin-bottom:14px;}
+  .hero p.sub{font-size:0.95rem; color:var(--muted); max-width:520px; margin-bottom:34px;}
+
+  .btn-row{display:flex; flex-wrap:wrap; gap:12px; margin-bottom:30px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:13px 22px; border-radius:10px; font-weight:600; font-size:0.94rem;
+    border:1px solid transparent; transition:transform .15s ease, background .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--accent); color:#221701;}
+  .btn-primary:hover{background:#ffd166;}
+  .btn-ghost{background:transparent; border-color:var(--border); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--violet); background:rgba(124,92,255,0.08);}
+  .btn-outline-violet{background:rgba(124,92,255,0.12); border-color:rgba(124,92,255,0.4); color:#cabaff;}
+  .btn-outline-violet:hover{background:rgba(124,92,255,0.22);}
+
+  .stat-strip{display:flex; gap:34px; flex-wrap:wrap; padding-top:22px; border-top:1px solid var(--border);}
+  .stat b{display:block; font-family:'JetBrains Mono'; font-size:1.4rem; color:var(--text);}
+  .stat span{font-size:0.78rem; color:var(--muted);}
+
+  /* ---------- TERMINAL ---------- */
+  .terminal{
+    background:var(--bg-deep);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:0 30px 70px -30px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02);
+    overflow:hidden;
+  }
+  .term-bar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:11px 16px; background:var(--surface); border-bottom:1px solid var(--border);
+  }
+  .term-dots{display:flex; gap:6px;}
+  .term-dots span{width:9px; height:9px; border-radius:50%; background:#3a3163;}
+  .term-title{font-family:'JetBrains Mono'; font-size:0.72rem; color:var(--muted);}
+  .term-live{display:flex; align-items:center; gap:6px; font-family:'JetBrains Mono'; font-size:0.7rem; color:var(--ok);}
+  .term-live .dot{width:6px; height:6px; border-radius:50%; background:var(--ok); animation:pulse 1.4s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+
+  .term-body{position:relative; height:270px; overflow:hidden; padding:0;}
+  .term-body::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(180deg, var(--bg-deep) 0%, transparent 14%, transparent 86%, var(--bg-deep) 100%);
+  }
+  .term-scroll{
+    display:flex; flex-direction:column;
+    animation: scrollUp 14s linear infinite;
+  }
+  .term-scroll:hover{animation-play-state:paused;}
+  .row{
+    display:grid; grid-template-columns:74px 1fr 96px 88px;
+    gap:10px; padding:9px 16px; font-family:'JetBrains Mono'; font-size:0.72rem;
+    border-bottom:1px solid rgba(244,242,255,0.04); white-space:nowrap;
+  }
+  .row .t{color:#6f6693;}
+  .row .uuid{color:#cabaff; overflow:hidden; text-overflow:ellipsis;}
+  .row .rfc{color:var(--muted);}
+  .tag{padding:2px 8px; border-radius:100px; font-size:0.65rem; text-align:center; width:fit-content;}
+  .tag.ok{background:rgba(51,217,178,0.14); color:var(--ok);}
+  .tag.bad{background:rgba(255,122,122,0.14); color:var(--bad);}
+  @keyframes scrollUp{
+    0%{transform:translateY(0);}
+    100%{transform:translateY(-50%);}
+  }
+  .term-foot{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px; background:var(--surface); border-top:1px solid var(--border);
+  }
+  .counter{font-family:'JetBrains Mono'; font-size:0.85rem; color:var(--accent);}
+  .counter span.small{color:var(--muted); font-size:0.7rem;}
+
+  .platform-row{display:flex; justify-content:center; gap:14px; margin-top:20px;}
+  .platform-badge{
+    width:42px; height:42px; border-radius:50%; background:var(--surface); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono'; font-size:0.62rem;
+    color:var(--muted); font-weight:600; transition:border-color .15s ease, color .15s ease;
+  }
+  .platform-badge:hover{border-color:var(--accent); color:var(--accent);}
+  .capacity-pill{display:flex; justify-content:center;}
+  .capacity-pill span{
+    margin-top:16px; display:inline-flex; align-items:center; gap:8px;
+    background:var(--surface); border:1px solid var(--border); color:var(--text);
+    padding:9px 18px; border-radius:100px; font-size:0.85rem; font-weight:500;
+  }
+  .capacity-pill svg{color:var(--accent);}
+
+  @media (prefers-reduced-motion: reduce){
+    .term-scroll{animation:none;}
+    .eyebrow .dot, .term-live .dot{animation:none;}
+  }
+
+  /* ---------- SECCIONES CON NUEVOS FONDOS ---------- */
+  #beneficios {
+    background-color: #F6F7FF;
+  }
+  #requisitos {
+    background-color: #FFFCF6;
+  }
+  #precios {
+    background-color: #F6F7FF;
+  }
+  #conocelo {
+    background-color: #FFFCF6;
+  }
+
+  section{padding:84px 0;}
+  .section-head{max-width:640px; margin:0 auto 48px; text-align:center;}
+  .section-head .k{font-family:'JetBrains Mono'; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--violet);}
+  .section-head h2{font-size:clamp(1.6rem, 3vw, 2.2rem); margin-top:10px;}
+  .section-head p{color:var(--muted); margin-top:12px;}
+
+  /* ---------- DEMO BAND: textos en blanco ---------- */
+  .demo-band .section-head .k,
+  .demo-band .section-head h2,
+  .demo-band .section-head p {
+    color: #fff;
+  }
+  .demo-band .section-head .k {
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* ---------- BENEFICIOS ---------- */
+  .services{display:grid; grid-template-columns:0.85fr 1.15fr; gap:22px; align-items:stretch;}
+  @media (max-width:900px){ .services{grid-template-columns:1fr;} }
+
+  .services-lead{
+    background:linear-gradient(160deg, var(--violet) 0%, var(--violet-deep) 100%);
+    border-radius:20px; padding:34px; display:flex; flex-direction:column; justify-content:space-between;
+    position:relative; overflow:hidden; min-height:420px;
+  }
+  .services-lead::before{
+    content:''; position:absolute; right:-40px; bottom:-40px; width:200px; height:200px; border-radius:50%;
+    background:rgba(255,255,255,0.06);
+  }
+  .services-lead .k{font-family:'JetBrains Mono'; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.65); margin-bottom:12px;}
+  .services-lead h2{font-size:1.9rem; color:#fff; margin-bottom:14px;}
+  .services-lead p{color:rgba(255,255,255,0.78); font-size:0.92rem; max-width:320px;}
+  .lead-visual{
+    margin-top:26px; background:rgba(11,7,32,0.4); border:1px solid rgba(255,255,255,0.12);
+    border-radius:14px; padding:18px; backdrop-filter:blur(4px);
+  }
+  .lead-visual .lv-row{display:flex; align-items:center; gap:10px; font-family:'JetBrains Mono'; font-size:0.72rem; color:rgba(255,255,255,0.85); padding:6px 0;}
+  .lead-visual .lv-row svg{color:var(--accent); flex-shrink:0;}
+  .lead-visual .lv-row + .lv-row{border-top:1px dashed rgba(255,255,255,0.12);}
+
+  .services-grid{display:grid; grid-template-columns:1fr 1fr; grid-auto-rows:1fr; gap:16px;}
+  .s-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .s-card:hover{border-color:rgba(255,197,61,0.35); transform:translateY(-2px);}
+  .s-card.dark{
+    background:linear-gradient(160deg, var(--bg-deep), #05030f);
+    border-color:rgba(255,197,61,0.25);
+  }
+  .s-card .icon-box{
+    width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+    background:rgba(255,197,61,0.1); color:var(--accent); margin-bottom:14px;
+  }
+  .s-card.dark .icon-box{background:rgba(255,197,61,0.16);}
+  .s-card h3{font-size:0.96rem; margin-bottom:6px;}
+  .s-card p{color:var(--muted); font-size:0.84rem;}
+  .s-card.dark h3{color:var(--accent);}
+
+  /* ---------- REQUISITOS ---------- */
+  .req-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media (max-width:760px){ .req-grid{grid-template-columns:1fr;} }
+  .req-card{border-radius:var(--radius); padding:28px 30px; border:1px solid var(--border);}
+  .req-card.min{background:var(--surface);}
+  .req-card.rec{background:linear-gradient(155deg, var(--violet), #4b32b3); border-color:transparent;}
+  .req-card h4{font-family:'JetBrains Mono'; font-size:0.82rem; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:18px; color:var(--muted);}
+  .req-card.rec h4{color:rgba(255,255,255,0.75);}
+  .req-list{list-style:none;}
+  .req-list li{display:flex; gap:10px; padding:9px 0; border-bottom:1px dashed var(--border); font-size:0.9rem;}
+  .req-card.rec .req-list li{border-bottom-color:rgba(255,255,255,0.15);}
+  .req-list li:last-child{border-bottom:none;}
+  .req-list b{font-family:'JetBrains Mono'; font-weight:500; min-width:150px; color:var(--muted); flex-shrink:0;}
+  .req-card.rec .req-list b{color:rgba(255,255,255,0.65);}
+
+  /* ---------- PRECIOS (card oscuro con texto blanco) ---------- */
+  .price-wrap{display:flex; justify-content:center;}
+  .price-card{
+    width:100%; max-width:420px;
+    background: var(--bg-deep);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:20px; padding:34px; position:relative; overflow:hidden;
+    color: #fff;
+  }
+  .price-card::before{
+    content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px;
+    background:radial-gradient(circle, rgba(255,197,61,0.18), transparent 70%);
+  }
+  .badge-launch{
+    display:inline-block; background:var(--accent); color:#221701; font-size:0.7rem; font-weight:700;
+    padding:4px 10px; border-radius:100px; margin-bottom:14px;
+  }
+  .price-old{color: rgba(255,255,255,0.5); text-decoration:line-through; font-family:'JetBrains Mono'; font-size:0.95rem;}
+  .price-new{font-family:'Space Grotesk'; font-size:2.6rem; font-weight:700; margin:2px 0 4px; color:#fff;}
+  .price-new span{font-size:1rem; color:rgba(255,255,255,0.6); font-weight:400; font-family:'IBM Plex Sans';}
+  .price-list{list-style:none; margin:24px 0 26px;}
+  .price-list li{display:flex; gap:10px; align-items:flex-start; padding:8px 0; font-size:0.92rem; color:rgba(255,255,255,0.85);}
+  .price-list svg{flex-shrink:0; margin-top:3px; color:var(--ok);}
+  .price-footnote{font-size:0.78rem; color:rgba(255,255,255,0.6); text-align:center; margin-top:16px; line-height:1.6;}
+  .price-footnote a{color:var(--accent);}
+
+  .price-card .btn-primary {
+    background: var(--accent);
+    color: #221701;
+  }
+  .price-card .btn-primary:hover {
+    background: #ffd166;
+  }
+
+  /* ---------- DEMO BAND (fondo oscuro) ---------- */
+  .demo-band{background:var(--bg-deep); border-top:1px solid var(--border); border-bottom:1px solid var(--border);}
+  .demo-inner{display:flex; flex-direction:column; align-items:center; text-align:center; gap:26px;}
+  .video-mock{
+    width:100%; max-width:560px; aspect-ratio:16/9; border-radius:var(--radius);
+    background:linear-gradient(155deg, var(--surface-2), var(--surface));
+    border:1px solid var(--border); display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .play-btn{
+    width:58px; height:58px; border-radius:50%; background:var(--accent); color:#221701;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .video-mock .brand-mark{position:absolute; font-family:'Space Grotesk'; font-weight:700; font-size:1.3rem; top:18px; left:22px; color:var(--muted); opacity:0.5;}
+
+  /* ---------- CARRUSEL ---------- */
+  .carousel{position:relative; max-width:640px; margin:0 auto;}
+  .carousel-track-wrap{overflow:hidden; border-radius:20px;}
+  .carousel-track{display:flex; transition:transform .45s cubic-bezier(.65,0,.35,1); align-items:stretch;}
+  .slide{
+    flex:0 0 100%; background:var(--surface); border:1px solid var(--border); border-radius:20px;
+    padding:40px 34px; text-align:center; position:relative;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    min-height:340px;
+  }
+  .slide > *{max-width:420px; flex-shrink:0;}
+  .slide-num{
+    position:static;
+    width:52px; height:52px; border-radius:50%; background:linear-gradient(155deg, var(--accent), #ffdd8a);
+    color:#221701; font-family:'Space Grotesk'; font-weight:700; font-size:1.3rem;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px -8px rgba(255,197,61,0.5);
+    margin-bottom:18px;
+  }
+  .slide .step-tag{display:block; font-family:'JetBrains Mono'; font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--violet); margin-bottom:10px;}
+  .slide h4{font-size:1.15rem; margin-bottom:10px;}
+  .slide p{color:var(--muted); font-size:0.9rem; max-width:420px; margin:0 auto 18px;}
+  .slide code{
+    display:inline-block; background:var(--bg-deep); border:1px solid var(--border); border-radius:8px;
+    padding:8px 12px; font-size:0.75rem; color:var(--accent); margin-bottom:18px; word-break:break-all;
+  }
+  .carousel-nav{display:flex; align-items:center; justify-content:center; gap:22px; margin-top:24px;}
+  .car-arrow{
+    width:40px; height:40px; border-radius:50%; border:1px solid var(--border); background:var(--surface);
+    display:flex; align-items:center; justify-content:center; color:var(--text); flex-shrink:0;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .car-arrow:hover{border-color:var(--accent); color:var(--accent);}
+  .car-dots{display:flex; gap:9px;}
+  .car-dot{width:9px; height:9px; border-radius:50%; background:var(--border); border:none; padding:0; cursor:pointer;}
+  .car-dot.active{background:var(--accent); width:22px; border-radius:100px;}
+
+  /* ---------- FAQ ---------- */
+  .faq-tiles{display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:36px;}
+  @media (max-width:760px){ .faq-tiles{grid-template-columns:1fr;} }
+  .faq-tile{
+    text-align:left; background:linear-gradient(155deg, var(--violet), var(--violet-deep));
+    border-radius:16px; padding:22px; border:2px solid transparent; transition:transform .15s ease, opacity .15s ease;
+  }
+  .faq-tile:hover{transform:translateY(-2px);}
+  .faq-tile.active{border-color:var(--accent);}
+  .faq-tile .ft-icon{
+    width:36px; height:36px; border-radius:9px; background:rgba(255,255,255,0.14); color:#fff;
+    display:flex; align-items:center; justify-content:center; margin-bottom:14px;
+  }
+  .faq-tile h4{color:#fff; font-size:0.98rem; margin-bottom:6px;}
+  .faq-tile p{color:rgba(255,255,255,0.75); font-size:0.8rem;}
+  .faq-tile .ft-count{font-family:'JetBrains Mono'; font-size:0.7rem; color:rgba(255,255,255,0.55); margin-top:10px; display:block;}
+
+  .faq-list{max-width:760px; margin:0 auto; background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden;}
+  .faq-item{border-bottom:1px solid var(--border);}
+  .faq-item:last-child{border-bottom:none;}
+  .faq-item.is-hidden{display:none;}
+  .faq-q{
+    width:100%; display:flex; align-items:center; gap:14px; padding:18px 22px; text-align:left;
+    font-size:0.94rem; font-weight:500;
+  }
+  .faq-q .cat-tag{
+    font-family:'JetBrains Mono'; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.04em;
+    color:var(--violet); background:rgba(124,92,255,0.12); padding:3px 9px; border-radius:100px; flex-shrink:0;
+  }
+  .faq-q .q-text{flex:1;}
+  .faq-q .chev{
+    width:26px; height:26px; border-radius:50%; background:rgba(255,197,61,0.1); color:var(--accent);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:transform .2s ease;
+  }
+  .faq-item.open .chev{transform:rotate(180deg);}
+  .faq-a{
+    max-height:0; overflow:hidden; transition:max-height .3s ease;
+    padding:0 22px; color:var(--muted); font-size:0.88rem;
+  }
+  .faq-item.open .faq-a{padding:0 22px 20px 62px;}
+
+  .faq-more{display:flex; justify-content:center; margin-top:22px;}
+  .faq-more-btn{
+    display:flex; align-items:center; gap:10px; font-size:0.85rem; color:var(--text);
+    border:1px solid var(--border); padding:10px 20px; border-radius:100px; background:var(--surface);
+  }
+  .faq-more-btn:hover{border-color:var(--accent); color:var(--accent);}
+  .faq-more-btn .plusmin{
+    width:20px; height:20px; border-radius:50%; background:rgba(255,197,61,0.14); color:var(--accent);
+    display:flex; align-items:center; justify-content:center; font-size:0.85rem;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--bg-deep); border-top:1px solid var(--border); padding:56px 0 26px;}
+  .foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; margin-bottom:40px;}
+  @media (max-width:700px){ .foot-grid{grid-template-columns:1fr; gap:28px;} }
+  .foot-grid h5{font-family:'JetBrains Mono'; font-size:0.76rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:16px;}
+  .foot-grid ul{list-style:none;}
+  .foot-grid li{margin-bottom:10px; font-size:0.88rem; color:var(--muted);}
+  .foot-grid a:hover{color:var(--text);}
+  .social-row{display:flex; gap:12px; margin-top:4px;}
+  .social-row a{width:34px; height:34px; border-radius:50%; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--muted);}
+  .social-row a:hover{border-color:var(--accent); color:var(--accent);}
+  .foot-bottom{border-top:1px solid var(--border); padding-top:22px; text-align:center; font-size:0.78rem; color:var(--muted);}
+
+  /* whatsapp float */
+  .wa-float{
+    position:fixed; bottom:22px; right:22px; width:54px; height:54px; border-radius:50%;
+    background:#25D366; display:flex; align-items:center; justify-content:center; z-index:60;
+    box-shadow:0 8px 22px rgba(0,0,0,0.4);
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner wrap">
+    <div class="brand">
+      <svg class="bolt" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" fill="#FFC53D"/></svg>
+      XMLFLASH
+    </div>
+    <nav class="navlinks">
+      <a href="#faq">Preguntas Frecuentes</a>
+      <a href="#beneficios">Beneficios</a>
+      <a href="#requisitos">Requisitos</a>
+      <a href="#precios">Precios</a>
+      <a href="#conocelo">Conócelo</a>
+    </nav>
+    <a href="#descarga" class="nav-cta">Descarga</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> SAT · CFDI · Validación en tiempo real</div>
+      <h1>Descarga masiva de <span class="hl">XML</span> y validación SAT</h1>
+      <p class="lead">La solución más rápida y eficiente para la gestión de CFDI.</p>
+      <p class="sub">Descarga hasta más de 20,000 XML por día y automatiza tus procesos fiscales.</p>
+      <div class="btn-row">
+        <a href="#descarga" class="btn btn-primary">↓ Descargar Demo</a>
+        <a href="#precios" class="btn btn-ghost">Comprar ahora — $789.00</a>
+      </div>
+      <div class="btn-row" style="margin-top:-14px;">
+        <a href="#conocelo" class="btn btn-outline-violet">▶ Ver guía de activación</a>
+        <a href="#precios" class="btn btn-outline-violet">▶ Ver guía de compra</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="terminal" role="img" aria-label="Vista simulada de descarga masiva de archivos XML en tiempo real">
+        <div class="term-bar">
+          <div class="term-dots"><span></span><span></span><span></span></div>
+          <div class="term-title">xmlflash — descarga_masiva.log</div>
+          <div class="term-live"><span class="dot"></span>EN VIVO</div>
+        </div>
+        <div class="term-body">
+          <div class="term-scroll" id="termScroll"></div>
+        </div>
+        <div class="term-foot">
+          <div class="counter" id="counter">0 <span class="small">XML descargados hoy</span></div>
+          <div class="mono" style="font-size:0.7rem; color:var(--muted);">RFC: XAXX010101000</div>
+        </div>
+      </div>
+
+      <div class="platform-row" aria-label="Disponible para Windows, macOS y Linux">
+        <span class="platform-badge" title="Windows">WIN</span>
+        <span class="platform-badge" title="macOS">MAC</span>
+        <span class="platform-badge" title="Linux">LNX</span>
+      </div>
+      <div class="capacity-pill">
+        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg> Hasta +20,000 XML/día por RFC</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="beneficios">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="k">Beneficios</div>
+      <h2>Lo que nos hace únicos</h2>
+      <p>Siete razones por las que despachos y empresas confían su gestión documental a XMLFLASH.</p>
+    </div>
+
+    <div class="services">
+      <div class="services-lead">
+        <div>
+          <div class="k">Beneficio principal</div>
+          <h2>Automatiza tu gestión XML</h2>
+          <p>Todos los procesos de gestión de archivos XML, de forma eficiente y sin errores, corriendo en segundo plano por ti.</p>
+        </div>
+        <div class="lead-visual">
+          <div class="lv-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Descarga automática de CFDI</div>
+          <div class="lv-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Validación contra el SAT</div>
+          <div class="lv-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Cero intervención manual</div>
+        </div>
+      </div>
+
+      <div class="services-grid">
+        <div class="s-card">
+          <div class="icon-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+          <h3>La velocidad que tu negocio necesita</h3>
+          <p>Procesa miles de archivos XML en segundos.</p>
+        </div>
+        <div class="s-card">
+          <div class="icon-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div>
+          <h3>XML masivo, resultados inmediatos</h3>
+          <p>Grandes volúmenes de datos sin sacrificar rendimiento.</p>
+        </div>
+        <div class="s-card">
+          <div class="icon-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg></div>
+          <h3>Multiplataforma</h3>
+          <p>Windows, macOS y Linux, incluso en ARM de 64 bits.</p>
+        </div>
+        <div class="s-card">
+          <div class="icon-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg></div>
+          <h3>Reporte de Cancelados</h3>
+          <p>Aísla tus XML cancelados para mantener tu contabilidad al día.</p>
+        </div>
+        <div class="s-card">
+          <div class="icon-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg></div>
+          <h3>Seguridad garantizada</h3>
+          <p>Protección avanzada para tus datos en cada descarga.</p>
+        </div>
+        <div class="s-card">
+          <div class="icon-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg></div>
+          <h3>Reporte General</h3>
+          <p>Reportes completos de todos tus XML para facilitar el análisis.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="requisitos">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="k">Requisitos del sistema</div>
+      <h2>Lo que necesita tu equipo</h2>
+    </div>
+    <div class="req-grid">
+      <div class="req-card min">
+        <h4>Requisitos mínimos</h4>
+        <ul class="req-list">
+          <li><b>Runtime</b> .Net 10.0 Runtime</li>
+          <li><b>Procesador</b> 64 bits, Dual-core 2.0 GHz</li>
+          <li><b>Memoria RAM</b> 4 GB</li>
+          <li><b>Almacenamiento</b> 500 MB de espacio libre</li>
+          <li><b>Sistema operativo</b> Windows 10/11, macOS 12 o Linux (glibc 2.27+)</li>
+          <li><b>Conexión</b> A internet</li>
+        </ul>
+      </div>
+      <div class="req-card rec">
+        <h4>Requisitos recomendados</h4>
+        <ul class="req-list">
+          <li><b>Runtime</b> .Net 10.0 Runtime</li>
+          <li><b>Procesador</b> Quad-core 3.0 GHz o superior</li>
+          <li><b>Memoria RAM</b> 8 GB o más</li>
+          <li><b>Almacenamiento</b> 1 GB libre (disco de estado sólido)</li>
+          <li><b>Sistema operativo</b> Windows 11, macOS 15</li>
+          <li><b>Conexión</b> A internet, 25 Mbps o superior</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="precios">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="k">Precios</div>
+      <h2>Nuestros precios</h2>
+    </div>
+    <div class="price-wrap">
+      <div class="price-card">
+        <span class="badge-launch">PROMOCIÓN DE LANZAMIENTO</span>
+        <div class="price-old mono">$989.50</div>
+        <div class="price-new">$789.00 <span>/ licencia anual</span></div>
+        <ul class="price-list">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Gestión ilimitada de archivos XML</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Soporte técnico</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Actualizaciones gratuitas por 1 año</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> RFC ilimitados</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Descarga hasta más de 20,000 XML por día y por RFC</li>
+        </ul>
+        <a href="#" class="btn btn-primary" style="width:100%; justify-content:center;">Solicitar acceso a la tienda</a>
+        <p class="price-footnote">
+          ¿Tienes dudas? <a href="#conocelo">Descarga la guía aquí</a> · <a href="#">Condiciones</a><br>
+          Aplicamos descuentos por volumen.<br>
+          Para solicitar acceso a la tienda envía un correo a<br>
+          <a href="mailto:contacto+compraxmlflash@nexxotek.com">contacto+compraxmlflash@nexxotek.com</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="demo-band">
+  <div class="wrap demo-inner">
+    <div>
+      <div class="section-head" style="margin-bottom:26px;">
+        <div class="k">Demo</div>
+        <h2>Activa tu demo de XMLFLASH en minutos</h2>
+      </div>
+    </div>
+    <div class="video-mock">
+      <span class="brand-mark">XMLFLASH</span>
+      <div class="play-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+    </div>
+    <a href="#" class="btn btn-primary">↓ Descárgalo aquí</a>
+  </div>
+</section>
+
+<section id="conocelo">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="k">Conócelo</div>
+      <h2>De la descarga a la activación</h2>
+      <p>Tres pasos, sin fricción, para tener XMLFLASH funcionando en tu equipo.</p>
+    </div>
+
+    <div class="carousel">
+      <div class="carousel-track-wrap">
+        <div class="carousel-track" id="carTrack">
+
+          <div class="slide">
+            <div class="slide-num">1</div>
+            <span class="step-tag">Proceso de descarga</span>
+            <h4>Solicita tu enlace</h4>
+            <p>Envía un correo solicitando el enlace de descarga. Lo recibirás de forma inmediata y automática; revisa spam si no lo localizas.</p>
+            <code>contacto+descargaxmlflash@nexxotek.com</code>
+            <a href="#" class="btn btn-outline-violet">Solicitar enlace de descarga</a>
+          </div>
+
+          <div class="slide">
+            <div class="slide-num">2</div>
+            <span class="step-tag">Guía de instalación</span>
+            <h4>Instala y configura</h4>
+            <p>Una guía paso a paso te ayuda a instalar y configurar XMLFLASH correctamente en tu sistema.</p>
+            <a href="#" class="btn btn-primary">↓ Descargar guía paso a paso</a>
+          </div>
+
+          <div class="slide">
+            <div class="slide-num">3</div>
+            <span class="step-tag">Adquiere un demo</span>
+            <h4>Activa tu versión demo</h4>
+            <p>Una guía completa te muestra desde la descarga hasta la activación de la demo y cómo aprovechar al máximo el periodo de prueba.</p>
+            <a href="#" class="btn btn-primary">↓ Descargar guía de activación</a>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="carousel-nav">
+        <button class="car-arrow" id="carPrev" aria-label="Paso anterior">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="car-dots" id="carDots">
+          <button class="car-dot active" data-i="0" aria-label="Ir al paso 1"></button>
+          <button class="car-dot" data-i="1" aria-label="Ir al paso 2"></button>
+          <button class="car-dot" data-i="2" aria-label="Ir al paso 3"></button>
+        </div>
+        <button class="car-arrow" id="carNext" aria-label="Siguiente paso">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="k">Preguntas frecuentes</div>
+      <h2>Resolvemos tus dudas</h2>
+      <p>Filtra por tema o revisa la lista completa.</p>
+    </div>
+
+    <div class="faq-tiles" id="faqTiles">
+      <button class="faq-tile" data-filter="producto">
+        <div class="ft-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg></div>
+        <h4>Producto y funcionamiento</h4>
+        <p>Qué es XMLFLASH, plataformas y guías.</p>
+        <span class="ft-count">5 preguntas</span>
+      </button>
+      <button class="faq-tile" data-filter="seguridad">
+        <div class="ft-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg></div>
+        <h4>Seguridad y datos</h4>
+        <p>Cómo protegemos tu información fiscal.</p>
+        <span class="ft-count">2 preguntas</span>
+      </button>
+      <button class="faq-tile" data-filter="compra">
+        <div class="ft-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12l-8 8-8-8 8-8 8 8z"/><circle cx="12" cy="12" r="2"/></svg></div>
+        <h4>Compra y licencias</h4>
+        <p>Precios, soporte y descuentos.</p>
+        <span class="ft-count">6 preguntas</span>
+      </button>
+    </div>
+
+    <div class="faq-list" id="faqList">
+
+      <div class="faq-item" data-cat="producto">
+        <button class="faq-q"><span class="cat-tag">Producto</span><span class="q-text">¿Qué es XMLFLASH?</span><span class="chev">+</span></button>
+        <div class="faq-a">Es un software de escritorio para descarga masiva de archivos XML/CFDI y su validación contra el SAT, pensado para despachos contables y empresas que gestionan grandes volúmenes de facturación.</div>
+      </div>
+
+      <div class="faq-item" data-cat="seguridad">
+        <button class="faq-q"><span class="cat-tag">Seguridad</span><span class="q-text">¿Por qué es más seguro que otros programas?</span><span class="chev">+</span></button>
+        <div class="faq-a">XMLFLASH aplica protección avanzada sobre tus datos durante todo el proceso de descarga y validación, sin exponer información sensible a terceros.</div>
+      </div>
+
+      <div class="faq-item" data-cat="producto">
+        <button class="faq-q"><span class="cat-tag">Producto</span><span class="q-text">¿Qué pasa si el SAT cambia su sistema?</span><span class="chev">+</span></button>
+        <div class="faq-a">El software se actualiza para mantenerse alineado con los cambios del SAT; las actualizaciones están incluidas durante el primer año de tu licencia.</div>
+      </div>
+
+      <div class="faq-item" data-cat="producto">
+        <button class="faq-q"><span class="cat-tag">Producto</span><span class="q-text">¿En qué plataformas funciona?</span><span class="chev">+</span></button>
+        <div class="faq-a">XMLFLASH es multiplataforma: funciona en Windows, macOS y Linux, incluyendo equipos con arquitectura ARM de 64 bits.</div>
+      </div>
+
+      <div class="faq-item" data-cat="seguridad">
+        <button class="faq-q"><span class="cat-tag">Seguridad</span><span class="q-text">¿Cómo se maneja la seguridad de mi información?</span><span class="chev">+</span></button>
+        <div class="faq-a">Tus datos se procesan con protección avanzada en cada etapa, minimizando la exposición de información fiscal.</div>
+      </div>
+
+      <div class="faq-item" data-cat="compra">
+        <button class="faq-q"><span class="cat-tag">Compra</span><span class="q-text">¿Qué soporte recibo al adquirir XMLFLASH?</span><span class="chev">+</span></button>
+        <div class="faq-a">Tu licencia incluye soporte técnico y actualizaciones gratuitas durante un año.</div>
+      </div>
+
+      <div class="faq-item is-hidden extra" data-cat="compra">
+        <button class="faq-q"><span class="cat-tag">Compra</span><span class="q-text">¿Cómo puedo adquirir XMLFLASH?</span><span class="chev">+</span></button>
+        <div class="faq-a">Solicita acceso a la tienda escribiendo a contacto+compraxmlflash@nexxotek.com; recibirás las instrucciones para completar tu compra.</div>
+      </div>
+
+      <div class="faq-item is-hidden extra" data-cat="compra">
+        <button class="faq-q"><span class="cat-tag">Compra</span><span class="q-text">¿El precio incluye actualizaciones futuras?</span><span class="chev">+</span></button>
+        <div class="faq-a">Sí, tu licencia anual incluye actualizaciones gratuitas por 1 año a partir de la activación.</div>
+      </div>
+
+      <div class="faq-item is-hidden extra" data-cat="compra">
+        <button class="faq-q"><span class="cat-tag">Compra</span><span class="q-text">¿Puedo probar el software antes de comprarlo?</span><span class="chev">+</span></button>
+        <div class="faq-a">Sí, puedes descargar y activar una versión demo siguiendo la guía de activación disponible en esta página.</div>
+      </div>
+
+      <div class="faq-item is-hidden extra" data-cat="seguridad">
+        <button class="faq-q"><span class="cat-tag">Seguridad</span><span class="q-text">¿XMLFLASH guarda mis contraseñas del SAT?</span><span class="chev">+</span></button>
+        <div class="faq-a">No: XMLFLASH está diseñado para no almacenar tus contraseñas del SAT de forma permanente.</div>
+      </div>
+
+      <div class="faq-item is-hidden extra" data-cat="compra">
+        <button class="faq-q"><span class="cat-tag">Compra</span><span class="q-text">¿Cuántos contribuyentes o RFC puedo usar por licencia?</span><span class="chev">+</span></button>
+        <div class="faq-a">Cada licencia incluye RFC ilimitados, con descarga de hasta más de 20,000 XML por día y por RFC.</div>
+      </div>
+
+      <div class="faq-item is-hidden extra" data-cat="producto">
+        <button class="faq-q"><span class="cat-tag">Producto</span><span class="q-text">¿Hay tutoriales o manuales del funcionamiento de XMLFLASH?</span><span class="chev">+</span></button>
+        <div class="faq-a">Sí, contamos con guías descargables de instalación, activación de demo y compra, disponibles en la sección "Conócelo".</div>
+      </div>
+
+      <div class="faq-item is-hidden extra" data-cat="compra">
+        <button class="faq-q"><span class="cat-tag">Compra</span><span class="q-text">¿Si compro más de una licencia hay algún tipo de descuento?</span><span class="chev">+</span></button>
+        <div class="faq-a">Sí, aplicamos descuentos por volumen. Escríbenos a contacto+compraxmlflash@nexxotek.com para cotizar tu caso.</div>
+      </div>
+
+    </div>
+
+    <div class="faq-more">
+      <button class="faq-more-btn" id="faqMoreBtn"><span class="plusmin">+</span> Ver más preguntas</button>
+    </div>
+  </div>
+</section>
+
+<footer id="descarga">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:14px; color:#fff;">
+          <svg class="bolt" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" fill="#FFC53D"/></svg>
+          XMLFLASH
+        </div>
+        <p style="color:var(--muted); font-size:0.86rem; max-width:280px;">Descarga masiva de XML y validación SAT para despachos y empresas en México.</p>
+        <div class="social-row">
+          <a href="#" aria-label="WhatsApp"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.5A10 10 0 1012 2z"/></svg></a>
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="YouTube">▶</a>
+          <a href="#" aria-label="TikTok">t</a>
+          <a href="#" aria-label="Instagram">◎</a>
+        </div>
+      </div>
+      <div>
+        <h5>Contacto</h5>
+        <ul>
+          <li><a href="mailto:contacto@nexxotek.com">contacto@nexxotek.com</a></li>
+          <li><a href="tel:7717078822">771 707 8822</a></li>
+          <li>Mineral de la Reforma, Hidalgo, México</li>
+        </ul>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Aviso de Privacidad</a></li>
+          <li><a href="#">Términos y Condiciones</a></li>
+          <li><a href="#">Política de Devoluciones</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">© 2025 XMLFLASH. Marca registrada. Todos los derechos reservados.</div>
+  </div>
+</footer>
+
+<a class="wa-float" href="#" aria-label="Contactar por WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.5A10 10 0 1012 2z"/></svg>
+</a>
+
+<script>
+  // ---- Terminal simulado ----
+  const rfcs = ['XAXX010101000','GODE561231GR8','VECJ880326XXX','LOPR900101AB2','MARF750812QW1','SATX970615KP4'];
+  const statuses = [{l:'Vigente', c:'ok'}, {l:'Vigente', c:'ok'}, {l:'Vigente', c:'ok'}, {l:'Cancelado', c:'bad'}];
+  function uuid(){
+    const h = () => Math.random().toString(16).slice(2,10);
+    return `${h()}-${h().slice(0,4)}-${h().slice(0,4)}-${h().slice(0,4)}-${h()}${h().slice(0,4)}`;
+  }
+  function buildRows(n){
+    let html = '';
+    for(let i=0;i<n;i++){
+      const s = statuses[Math.floor(Math.random()*statuses.length)];
+      const rfc = rfcs[Math.floor(Math.random()*rfcs.length)];
+      const t = (10 + Math.floor(Math.random()*3)) + ':' + String(Math.floor(Math.random()*60)).padStart(2,'0') + ':' + String(Math.floor(Math.random()*60)).padStart(2,'0');
+      html += `<div class="row"><span class="t">${t}</span><span class="uuid">${uuid()}</span><span class="rfc">${rfc}</span><span class="tag ${s.c}">${s.l}</span></div>`;
+    }
+    return html;
+  }
+  const scrollEl = document.getElementById('termScroll');
+  if(scrollEl){
+    const rows = buildRows(16);
+    scrollEl.innerHTML = rows + rows;
+  }
+  const counterEl = document.getElementById('counter');
+  if(counterEl){
+    let n = 14820;
+    const label = ' <span class="small">XML descargados hoy</span>';
+    setInterval(() => {
+      n += Math.floor(Math.random()*9)+1;
+      if(n > 20400) n = 14820;
+      counterEl.innerHTML = n.toLocaleString('es-MX') + label;
+    }, 900);
+  }
+
+  // ---- Carrusel Conócelo ----
+  const track = document.getElementById('carTrack');
+  const dots = document.querySelectorAll('.car-dot');
+  const prevBtn = document.getElementById('carPrev');
+  const nextBtn = document.getElementById('carNext');
+  let carIndex = 0;
+  const totalSlides = 3;
+  function goToSlide(i){
+    carIndex = (i + totalSlides) % totalSlides;
+    track.style.transform = `translateX(-${carIndex * 100}%)`;
+    dots.forEach((d, idx) => d.classList.toggle('active', idx === carIndex));
+  }
+  prevBtn.addEventListener('click', () => goToSlide(carIndex - 1));
+  nextBtn.addEventListener('click', () => goToSlide(carIndex + 1));
+  dots.forEach(d => d.addEventListener('click', () => goToSlide(parseInt(d.dataset.i))));
+  let carTimer = setInterval(() => goToSlide(carIndex + 1), 6000);
+  track.closest('.carousel').addEventListener('mouseenter', () => clearInterval(carTimer));
+  track.closest('.carousel').addEventListener('mouseleave', () => { carTimer = setInterval(() => goToSlide(carIndex + 1), 6000); });
+
+  // ---- FAQ: acordeón ----
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-a').style.maxHeight = null;
+        i.querySelector('.chev').textContent = '+';
+      });
+      if(!wasOpen){
+        item.classList.add('open');
+        const a = item.querySelector('.faq-a');
+        a.style.maxHeight = a.scrollHeight + 40 + 'px';
+        item.querySelector('.chev').textContent = '−';
+      }
+    });
+  });
+
+  // ---- FAQ: ver más ----
+  const moreBtn = document.getElementById('faqMoreBtn');
+  let expanded = false;
+  moreBtn.addEventListener('click', () => {
+    expanded = !expanded;
+    document.querySelectorAll('.faq-item.extra').forEach(i => i.classList.toggle('is-hidden', !expanded));
+    moreBtn.innerHTML = expanded
+      ? '<span class="plusmin">−</span> Ver menos preguntas'
+      : '<span class="plusmin">+</span> Ver más preguntas';
+  });
+
+  // ---- FAQ: filtro por categoría ----
+  const tiles = document.querySelectorAll('.faq-tile');
+  let activeFilter = null;
+  tiles.forEach(tile => {
+    tile.addEventListener('click', () => {
+      const f = tile.dataset.filter;
+      if(activeFilter === f){
+        activeFilter = null;
+        tiles.forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.faq-item').forEach(i => {
+          i.classList.toggle('is-hidden', i.classList.contains('extra') && !expanded);
+        });
+      } else {
+        activeFilter = f;
+        tiles.forEach(t => t.classList.toggle('active', t === tile));
+        document.querySelectorAll('.faq-item').forEach(i => {
+          i.classList.toggle('is-hidden', i.dataset.cat !== f);
+        });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
