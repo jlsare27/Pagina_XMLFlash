@@ -92,37 +92,61 @@ section{padding:92px 0}
 .hero-proof{display:flex;gap:28px;flex-wrap:wrap;margin-top:30px;padding-top:22px;border-top:1px solid var(--border)}
 .hero-proof b{display:block;font:700 1.25rem 'JetBrains Mono'}
 .hero-proof span{display:block;color:var(--muted);font-size:.75rem;margin-top:2px}
+.platform-row{display:flex;align-items:center;gap:14px;margin-top:22px}
+.platform-row .pr-label{color:var(--muted);font-size:.78rem}
+.platform-badge{
+  width:40px;height:40px;border-radius:50%;background:#fff;border:1px solid var(--border);
+  display:grid;place-items:center;font:700 .6rem 'JetBrains Mono';color:var(--muted);
+  transition:border-color .15s ease,color .15s ease
+}
+.platform-badge:hover{border-color:var(--accent);color:var(--accent)}
 @media(max-width:950px){.hero-grid{grid-template-columns:1fr}.hero-copy{max-width:760px}.hero-copy h1{font-size:3.2rem}}
 
-/* DESKTOP APP MOCKUP */
-.app-shell{
-  background:var(--bg-deep);border-radius:24px;overflow:hidden;
-  border:1px solid rgba(255,255,255,.13);box-shadow:0 34px 80px rgba(23,22,58,.28)
-}
-.app-top{height:46px;background:#201E4B;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;padding:0 15px}
-.window-dots{display:flex;gap:6px}.window-dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.22)}
-.app-title{color:var(--dark-muted);font:600 .68rem 'JetBrains Mono'}
-.app-actions{display:flex;gap:7px}
-.app-actions span{padding:5px 9px;border:1px solid rgba(255,255,255,.08);border-radius:7px;color:#D8D8F4;font-size:.62rem}
-.app-body{display:grid;grid-template-columns:142px 1fr;min-height:355px}
-.app-side{padding:14px 9px;background:#1C1A43;border-right:1px solid rgba(255,255,255,.07)}
-.side-label{font:600 .57rem 'JetBrains Mono';color:#7779BD;text-transform:uppercase;letter-spacing:.08em;padding:7px 10px}
-.side-item{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:8px;color:#C6C7E7;font-size:.68rem;margin:2px 0}
-.side-item.active{background:rgba(98,102,240,.28);color:#fff}
-.side-icon{width:18px;height:18px;border-radius:5px;background:rgba(255,255,255,.08);display:grid;place-items:center;font-size:.65rem}
-.app-content{padding:24px}
-.mock-heading{color:#fff;font-size:1.25rem;margin-bottom:5px}
-.mock-sub{color:var(--dark-muted);font-size:.72rem;margin-bottom:20px}
-.mock-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.mock-card{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:15px}
-.mock-card .mock-icon{width:30px;height:30px;border-radius:8px;background:rgba(244,121,29,.13);color:#FFC37A;display:grid;place-items:center;margin-bottom:12px}
-.mock-card b{display:block;color:#fff;font-size:.72rem}.mock-card small{color:var(--dark-muted);font-size:.6rem}
-.mock-bottom{margin-top:12px;display:grid;grid-template-columns:1.4fr .6fr;gap:10px}
-.mock-table,.mock-status{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:13px}
-.mock-line{display:grid;grid-template-columns:1.5fr .8fr .6fr;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font:500 .59rem 'JetBrains Mono';color:#AFAFD8}
-.mock-line:last-child{border-bottom:0}
-.status-num{font:700 1.7rem 'Space Grotesk';color:#FFC53D}.status-text{color:var(--dark-muted);font-size:.65rem}
-@media(max-width:650px){.app-body{grid-template-columns:1fr}.app-side{display:none}.mock-cards{grid-template-columns:1fr}.mock-bottom{grid-template-columns:1fr}}
+/* REAL APP MOCKUP — réplica fiel de las capturas reales de XMLFlash (tema claro) */
+.ra-shell{background:#fff;border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:0 30px 70px -28px rgba(46,39,120,.35)}
+.ra-top{background:linear-gradient(120deg,var(--violet),var(--violet-deep));padding:11px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ra-brand{display:flex;align-items:center;gap:7px;color:#fff;font:700 .92rem 'Space Grotesk';flex-shrink:0}
+.ra-brand .ra-logo{width:19px;height:19px;border-radius:5px;background:var(--accent);display:grid;place-items:center;font-size:.6rem;color:#241506}
+.ra-top-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.ra-pill-btn{background:rgba(255,255,255,.16);color:#fff;padding:5px 10px;border-radius:8px;font-size:.6rem;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.ra-pill-btn.exit{background:var(--accent);color:#241506;font-weight:700}
+.ra-body{display:grid;grid-template-columns:130px 1fr;min-height:300px}
+.ra-side{background:var(--surface-2);padding:12px 8px;border-right:1px solid var(--border)}
+.ra-side-item{display:flex;align-items:center;gap:7px;padding:8px 9px;border-radius:9px;color:#5355D7;font-size:.66rem;margin-bottom:3px}
+.ra-side-item.active{background:#fff;color:var(--violet-deep);font-weight:600;box-shadow:0 2px 6px rgba(70,69,189,.12)}
+.ra-side-div{height:1px;background:var(--border);margin:9px 3px}
+.ra-content{padding:18px 20px}
+.ra-h{font-size:1.02rem;margin-bottom:3px}
+.ra-sub{color:var(--muted);font-size:.66rem;margin-bottom:14px}
+
+.ra-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.ra-card{border:1px solid var(--border);border-radius:11px;padding:12px}
+.ra-card .ra-ci{width:24px;height:24px;border-radius:7px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-bottom:8px;font-size:.68rem}
+.ra-card b{display:block;font-size:.68rem;margin-bottom:2px}
+.ra-card small{display:block;color:var(--muted);font-size:.58rem;margin-bottom:9px;line-height:1.3}
+.ra-dl{display:inline-block;background:var(--violet);color:#fff;font-size:.58rem;font-weight:600;padding:5px 13px;border-radius:999px}
+
+.ra-rep-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.ra-f label{display:block;font-size:.58rem;color:var(--muted);margin-bottom:4px}
+.ra-f .ra-select{border:1px solid var(--border);border-radius:9px;padding:6px 9px;font-size:.62rem;color:var(--text);background:#fff}
+.ra-toggle{display:flex;gap:5px}
+.ra-toggle span{padding:5px 11px;border-radius:8px;font-size:.6rem;background:var(--surface-2);color:var(--muted)}
+.ra-toggle span.active{background:var(--violet);color:#fff}
+.ra-comp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ra-comp{border:1px solid var(--border);border-radius:9px;padding:7px 5px;text-align:center}
+.ra-comp b{display:block;font-size:.72rem}
+.ra-comp span{font-size:.52rem;color:var(--muted)}
+.ra-comp.total{border-color:var(--violet);background:var(--surface-2)}
+.ra-comp.total b{color:var(--violet-deep)}
+
+.ra-table{width:100%;border-collapse:collapse;font-size:.62rem}
+.ra-table th{text-align:left;color:var(--muted);font:600 .54rem 'JetBrains Mono';text-transform:uppercase;letter-spacing:.04em;padding:6px;border-bottom:1px solid var(--border)}
+.ra-table td{padding:8px 6px;border-bottom:1px solid var(--border)}
+.ra-pill-tag{padding:2px 8px;border-radius:999px;font-size:.54rem;font-weight:700}
+.ra-pill-tag.ciec{background:rgba(98,102,240,.12);color:var(--violet-deep)}
+.ra-pill-tag.efirma{background:rgba(22,163,74,.12);color:var(--ok)}
+
+@media(max-width:650px){.ra-body{grid-template-columns:1fr}.ra-side{display:none}.ra-cards{grid-template-columns:1fr}.ra-rep-row{grid-template-columns:1fr}.ra-comp-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* BENEFITS CAROUSEL */
 #beneficios{background:#FFFCF6}
@@ -147,22 +171,6 @@ section{padding:92px 0}
 .arrow{width:42px;height:42px;border:1px solid var(--border);background:#fff;border-radius:50%;display:grid;place-items:center}
 .arrow:hover{border-color:var(--accent);color:var(--accent)}
 .dots{display:flex;gap:8px}.dot-btn{width:9px;height:9px;background:#D7DEFB;border-radius:99px}.dot-btn.active{width:24px;background:var(--accent)}
-
-/* APP PREVIEW CARDS */
-.mini-window{
-  background:#151436;border:1px solid rgba(255,255,255,.12);border-radius:17px;
-  box-shadow:0 22px 50px rgba(20,15,75,.3);overflow:hidden
-}
-.mini-bar{height:35px;background:rgba(255,255,255,.05);display:flex;align-items:center;gap:6px;padding:0 11px}
-.mini-bar i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25)}
-.mini-bar span{margin-left:7px;color:#9293C9;font:600 .58rem 'JetBrains Mono'}
-.mini-body{padding:18px}
-.mini-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.mini-stat{padding:12px 8px;border-radius:10px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);text-align:center}
-.mini-stat b{display:block;color:#FFC53D;font:700 1.05rem 'JetBrains Mono'}.mini-stat span{color:#A9AAD2;font-size:.59rem}
-.mini-list{display:grid;gap:8px}
-.mini-list-item{display:flex;align-items:center;gap:9px;padding:9px;border-radius:9px;background:rgba(255,255,255,.045);color:#E5E5F6;font-size:.65rem}
-.mini-list-item em{margin-left:auto;color:#33D9B2;font:600 .58rem 'JetBrains Mono';font-style:normal}
 
 /* XML FLOW - inspired by image 1 */
 #flujo{background:#F6F7FF}
@@ -206,24 +214,22 @@ section{padding:92px 0}
 .browser-section{display:grid;grid-template-columns:1.05fr .95fr;gap:58px;align-items:center}
 .browser-mock{
   background:var(--bg-deep);border:1px solid rgba(255,255,255,.13);border-radius:23px;overflow:hidden;
-  box-shadow:0 30px 70px rgba(23,22,58,.23)
+  box-shadow:0 30px 70px rgba(23,22,58,.23);position:relative
 }
-.browser-top{background:#211F52;padding:10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid rgba(255,255,255,.08)}
-.browser-btn{width:26px;height:26px;border-radius:7px;background:rgba(255,255,255,.06);color:#C8C8E7;display:grid;place-items:center;font-size:.72rem}
-.browser-url{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);border-radius:8px;color:#B7B8DD;padding:7px 10px;font:500 .61rem 'JetBrains Mono';white-space:nowrap;overflow:hidden}
-.browser-live{color:#33D9B2;font:600 .56rem 'JetBrains Mono'}
-.browser-content{display:grid;grid-template-columns:145px 1fr;min-height:330px}
-.browser-menu{background:#1B1940;padding:13px 9px;border-right:1px solid rgba(255,255,255,.07)}
-.browser-menu .menu-title{color:#7D7FC0;font:600 .56rem 'JetBrains Mono';padding:6px 9px;text-transform:uppercase}
-.portal-link{display:flex;align-items:center;gap:7px;padding:8px 9px;border-radius:8px;color:#C7C8E7;font-size:.61rem;margin:2px 0}
-.portal-link.active{background:rgba(98,102,240,.25);color:#fff}
-.portal-link span{width:15px;height:15px;border-radius:5px;background:rgba(255,255,255,.07);display:grid;place-items:center;font-size:.55rem}
-.sat-screen{padding:18px;background:#24214F}
-.sat-banner{padding:13px;border-radius:10px;background:linear-gradient(120deg,#5A5DCB,#403EA2);margin-bottom:12px}
-.sat-banner b{color:#fff;font-size:.78rem}.sat-banner small{display:block;color:rgba(255,255,255,.68);font-size:.58rem;margin-top:3px}
-.sat-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:13px}
-.sat-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.61rem;color:#C9C9E6}
-.sat-row:last-child{border:0}.sat-ok{color:#33D9B2}
+.bm-row{display:flex;align-items:center;gap:6px;padding:9px 12px;background:var(--dark-surface);flex-wrap:wrap}
+.bm-row+.bm-row{border-top:1px solid rgba(255,255,255,.08)}
+.bm-icon-btn{width:27px;height:27px;border-radius:8px;background:rgba(255,255,255,.07);color:#D8D8F4;display:grid;place-items:center;font-size:.78rem;flex-shrink:0}
+.bm-pill{background:rgba(255,255,255,.09);color:#D8D8F4;padding:6px 11px;border-radius:999px;font-size:.64rem;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.bm-pill.out{color:#FFADA8}
+.bm-url{flex:1;min-width:120px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:6px 13px;color:#B7B8DD;font:500 .62rem 'JetBrains Mono';overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.bm-dropdown{position:absolute;top:46px;left:12px;background:var(--dark-surface);border:1px solid rgba(255,255,255,.1);border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,.45);padding:7px 0;z-index:5;min-width:208px}
+.bm-dropdown li{list-style:none;padding:8px 16px;font-size:.66rem;color:#E4E4FA;display:flex;align-items:center;gap:8px}
+.bm-dropdown li:hover{background:rgba(255,255,255,.05)}
+.bm-dropdown li.has-sub{justify-content:space-between;color:#C7C8E7}
+.browser-frame-mock{min-height:210px;background:#EDEEF7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#9496C4;text-align:center;padding:20px}
+.browser-frame-mock .bf-icon{width:32px;height:32px;opacity:.55}
+.browser-frame-mock span{font-size:.7rem}
+@media(max-width:480px){.bm-dropdown{left:8px;min-width:180px}}
 .browser-copy h2{font-size:clamp(2rem,3.5vw,3rem);line-height:1.08;margin:9px 0 14px}
 .browser-copy>p{color:var(--muted);max-width:500px}
 .check-list{list-style:none;margin:22px 0}
@@ -232,7 +238,7 @@ section{padding:92px 0}
 .portal-chips{display:flex;flex-wrap:wrap;gap:8px}
 .portal-chip{background:#fff;border:1px solid var(--border);border-radius:999px;padding:8px 12px;font-size:.75rem}
 .portal-chip:hover{border-color:var(--violet);color:var(--violet-deep)}
-@media(max-width:900px){.browser-section{grid-template-columns:1fr}.browser-copy{order:-1}.browser-content{grid-template-columns:1fr}.browser-menu{display:none}}
+@media(max-width:900px){.browser-section{grid-template-columns:1fr}.browser-copy{order:-1}}
 
 /* REQUIREMENTS / PRICE */
 #requisitos{background:#F6F7FF}
@@ -253,6 +259,10 @@ section{padding:92px 0}
 .price-new{font:700 2.8rem 'Space Grotesk';position:relative;z-index:1}.price-new span{font:400 .9rem 'IBM Plex Sans';color:rgba(255,255,255,.6)}
 .price-list{list-style:none;margin:20px 0}.price-list li{display:flex;gap:9px;padding:8px 0;color:rgba(255,255,255,.82);font-size:.86rem}.price-list i{color:#33D9B2;font-style:normal}
 .price-note{text-align:center;color:rgba(255,255,255,.5);font-size:.72rem;line-height:1.7;margin-top:15px}
+.price-functions{position:relative;z-index:1;margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12)}
+.price-functions .pf-label{color:rgba(255,255,255,.5);font:600 .62rem 'JetBrains Mono';text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.pf-chips{display:flex;flex-wrap:wrap;gap:7px}
+.pf-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:6px 11px;font-size:.72rem;color:rgba(255,255,255,.85)}
 
 /* DEMO */
 .demo-band{background:var(--bg-deep);color:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -263,6 +273,28 @@ section{padding:92px 0}
 .play{width:68px;height:68px;border-radius:50%;background:var(--accent);color:#241506;display:grid;place-items:center;font-size:1.3rem;position:relative;z-index:2;box-shadow:0 15px 35px rgba(244,121,29,.25)}
 .video-label{position:absolute;left:20px;top:17px;font:700 .8rem 'JetBrains Mono';color:#8F91C8}
 @media(max-width:800px){.demo-layout{grid-template-columns:1fr}.demo-band .section-head{text-align:center}}
+
+/* CONÓCELO (carrusel de pasos) */
+#conocelo{background:#FFFCF6}
+.steps-wrap{max-width:640px;margin:0 auto}
+.steps-track-wrap{overflow:hidden;border-radius:20px}
+.steps-track{display:flex;transition:transform .45s cubic-bezier(.65,0,.35,1)}
+.step-slide{
+  flex:0 0 100%;background:#fff;border:1px solid var(--border);border-radius:20px;
+  padding:42px 34px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center
+}
+.step-slide .step-num{
+  width:34px;height:34px;border-radius:9px;background:var(--accent-soft);color:var(--accent);
+  display:grid;place-items:center;font:700 .85rem 'JetBrains Mono';margin-bottom:14px
+}
+.step-slide .step-tag{font:600 .68rem 'JetBrains Mono';letter-spacing:.08em;text-transform:uppercase;color:var(--violet);margin-bottom:6px}
+.step-slide h4{font-size:1.25rem;margin-bottom:10px}
+.step-slide p{color:var(--muted);font-size:.9rem;max-width:420px;margin:0 auto 18px}
+.step-slide code{
+  display:inline-block;background:var(--bg-deep);border:1px solid var(--border);border-radius:8px;
+  padding:8px 12px;font-size:.75rem;color:var(--accent);margin-bottom:18px;word-break:break-all
+}
+.steps-nav{display:flex;align-items:center;justify-content:center;gap:20px;margin-top:24px}
 
 /* FAQ */
 #faq{background:#F6F7FF}
@@ -309,6 +341,7 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
       <a href="#navegador">Navegador SAT</a>
       <a href="#requisitos">Requisitos</a>
       <a href="#precios">Precios</a>
+      <a href="#conocelo">Conócelo</a>
       <a href="#faq">FAQ</a>
     </nav>
     <a class="nav-cta" href="#demo">Descargar demo</a>
@@ -332,47 +365,51 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
         <div><b>3</b><span>plataformas</span></div>
         <div><b>RFC</b><span>ilimitados por licencia</span></div>
       </div>
+      <div class="platform-row" aria-label="Disponible para Windows, macOS y Linux">
+        <span class="pr-label">Disponible para</span>
+        <span class="platform-badge" title="Windows">WIN</span>
+        <span class="platform-badge" title="macOS">MAC</span>
+        <span class="platform-badge" title="Linux">LNX</span>
+      </div>
     </div>
 
-    <div class="app-shell" aria-label="Vista previa de la aplicación de escritorio XMLFLASH">
-      <div class="app-top">
-        <div class="window-dots"><i></i><i></i><i></i></div>
-        <div class="app-title">XMLFlash · Escritorio</div>
-        <div class="app-actions"><span>LoginSAT</span><span>Preferencias</span></div>
+    <div class="ra-shell" aria-label="Vista previa de la aplicación de escritorio XMLFlash — pantalla Documentos">
+      <div class="ra-top">
+        <div class="ra-brand"><span class="ra-logo">▤</span>XMLFlash</div>
+        <div class="ra-top-actions">
+          <span class="ra-pill-btn">⊕ Navegador</span>
+          <span class="ra-pill-btn">◔ LoginSAT</span>
+          <span class="ra-pill-btn">⚙ Preferencias</span>
+          <span class="ra-pill-btn">🛟 Soporte</span>
+          <span class="ra-pill-btn exit">⏻ Salir</span>
+        </div>
       </div>
-      <div class="app-body">
-        <aside class="app-side">
-          <div class="side-label">Operación</div>
-          <div class="side-item active"><span class="side-icon">▣</span>Documentos</div>
-          <div class="side-item"><span class="side-icon">◔</span>Reportes</div>
-          <div class="side-item"><span class="side-icon">⌕</span>Consultas</div>
-          <div class="side-item"><span class="side-icon">◎</span>Explorador</div>
-          <div class="side-label">Administración</div>
-          <div class="side-item"><span class="side-icon">⌁</span>LoginSAT</div>
-          <div class="side-item"><span class="side-icon">▤</span>Bóveda CFDI</div>
+      <div class="ra-body">
+        <aside class="ra-side">
+          <div class="ra-side-item active">▤ Documentos</div>
+          <div class="ra-side-item">◔ Reportes</div>
+          <div class="ra-side-item">⌁ LoginSAT</div>
+          <div class="ra-side-item">⌕ Consultas</div>
+          <div class="ra-side-item">◎ Explorador</div>
+          <div class="ra-side-div"></div>
+          <div class="ra-side-item">◈ Bóveda CFDI</div>
+          <div class="ra-side-item">⚙ Preferencias</div>
+          <div class="ra-side-item">🛟 Soporte</div>
+          <div class="ra-side-item">‹ Colapsar</div>
         </aside>
-        <div class="app-content">
-          <h3 class="mock-heading">Documentos fiscales</h3>
-          <p class="mock-sub">Constancia · Opinión de cumplimiento · Cédula fiscal</p>
-          <div class="mock-cards">
-            <div class="mock-card"><div class="mock-icon">▤</div><b>Constancia</b><small>Descargar PDF</small></div>
-            <div class="mock-card"><div class="mock-icon">✓</div><b>Opinión</b><small>Consultar estatus</small></div>
-            <div class="mock-card"><div class="mock-icon">▥</div><b>Cédula</b><small>Descargar PDF</small></div>
-          </div>
-          <div class="mock-bottom">
-            <div class="mock-table">
-              <div class="mock-line"><span>constancia.xml</span><span>XAXX010101000</span><span style="color:#33D9B2">Listo</span></div>
-              <div class="mock-line"><span>opinion.xml</span><span>MEXA8501012Q3</span><span style="color:#33D9B2">Listo</span></div>
-              <div class="mock-line"><span>cedula.xml</span><span>GODE561231GR8</span><span style="color:#33D9B2">Listo</span></div>
-            </div>
-            <div class="mock-status"><div class="status-num">3,412</div><div class="status-text">comprobantes en bóveda</div></div>
+        <div class="ra-content">
+          <h3 class="ra-h">Documentos fiscales</h3>
+          <p class="ra-sub">Constancia de situación fiscal · Opinión de cumplimiento · Cédula de identificación fiscal</p>
+          <div class="ra-cards">
+            <div class="ra-card"><div class="ra-ci">▤</div><b>Constancia de situación fiscal</b><small>Obtén tu constancia con solo tu RFC</small><span class="ra-dl">Descargar</span></div>
+            <div class="ra-card"><div class="ra-ci">✓</div><b>Opinión de cumplimiento</b><small>Consulta tu opinión fiscal</small><span class="ra-dl">Descargar</span></div>
+            <div class="ra-card"><div class="ra-ci">▥</div><b>Cédula de identificación fiscal</b><small>Obtén tu cédula en PDF</small><span class="ra-dl">Descargar</span></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
-
 <section id="beneficios">
   <div class="wrap">
     <div class="section-head">
@@ -396,13 +433,34 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
                 <div class="feature"><div class="ficon">▥</div><div><b>Cédula de identificación fiscal</b><span>Genera el documento en PDF.</span></div></div>
               </div>
             </div>
-            <div class="mini-window">
-              <div class="mini-bar"><i></i><i></i><i></i><span>XMLFlash — Documentos</span></div>
-              <div class="mini-body">
-                <div class="mini-list">
-                  <div class="mini-list-item">▤ Constancia de situación fiscal <em>LISTO</em></div>
-                  <div class="mini-list-item">✓ Opinión de cumplimiento <em>LISTO</em></div>
-                  <div class="mini-list-item">▥ Cédula de identificación fiscal <em>LISTO</em></div>
+            <div class="ra-shell">
+              <div class="ra-top">
+                <div class="ra-brand"><span class="ra-logo">▤</span>XMLFlash</div>
+                <div class="ra-top-actions">
+                  <span class="ra-pill-btn">⊕ Navegador</span>
+                  <span class="ra-pill-btn">◔ LoginSAT</span>
+                  <span class="ra-pill-btn exit">⏻ Salir</span>
+                </div>
+              </div>
+              <div class="ra-body">
+                <aside class="ra-side">
+                  <div class="ra-side-item active">▤ Documentos</div>
+                  <div class="ra-side-item">◔ Reportes</div>
+                  <div class="ra-side-item">⌁ LoginSAT</div>
+                  <div class="ra-side-item">⌕ Consultas</div>
+                  <div class="ra-side-item">◎ Explorador</div>
+                  <div class="ra-side-div"></div>
+                  <div class="ra-side-item">◈ Bóveda CFDI</div>
+                  <div class="ra-side-item">‹ Colapsar</div>
+                </aside>
+                <div class="ra-content">
+                  <h3 class="ra-h">Documentos fiscales</h3>
+                  <p class="ra-sub">Constancia de situación fiscal · Opinión de cumplimiento · Cédula de identificación fiscal</p>
+                  <div class="ra-cards">
+                    <div class="ra-card"><div class="ra-ci">▤</div><b>Constancia de situación fiscal</b><small>Obtén tu constancia con solo tu RFC</small><span class="ra-dl">Descargar</span></div>
+                    <div class="ra-card"><div class="ra-ci">✓</div><b>Opinión de cumplimiento</b><small>Consulta tu opinión fiscal</small><span class="ra-dl">Descargar</span></div>
+                    <div class="ra-card"><div class="ra-ci">▥</div><b>Cédula de identificación fiscal</b><small>Obtén tu cédula en PDF</small><span class="ra-dl">Descargar</span></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -419,16 +477,42 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
                 <div class="feature"><div class="ficon">▤</div><div><b>Exportación</b><span>Prepara la información para continuar tu trabajo.</span></div></div>
               </div>
             </div>
-            <div class="mini-window">
-              <div class="mini-bar"><i></i><i></i><i></i><span>XMLFlash — Reportes</span></div>
-              <div class="mini-body">
-                <div class="mini-stat-grid">
-                  <div class="mini-stat"><b>128</b><span>Ingreso</span></div>
-                  <div class="mini-stat"><b>34</b><span>Egreso</span></div>
-                  <div class="mini-stat"><b>16</b><span>Nómina</span></div>
-                  <div class="mini-stat"><b>52</b><span>Pagos</span></div>
-                  <div class="mini-stat"><b>230</b><span>Facturas</span></div>
-                  <div class="mini-stat"><b>19</b><span>Retenciones</span></div>
+            <div class="ra-shell">
+              <div class="ra-top">
+                <div class="ra-brand"><span class="ra-logo">▤</span>XMLFlash</div>
+                <div class="ra-top-actions">
+                  <span class="ra-pill-btn">⊕ Navegador</span>
+                  <span class="ra-pill-btn">◔ LoginSAT</span>
+                  <span class="ra-pill-btn exit">⏻ Salir</span>
+                </div>
+              </div>
+              <div class="ra-body">
+                <aside class="ra-side">
+                  <div class="ra-side-item">▤ Documentos</div>
+                  <div class="ra-side-item active">◔ Reportes</div>
+                  <div class="ra-side-item">⌁ LoginSAT</div>
+                  <div class="ra-side-item">⌕ Consultas</div>
+                  <div class="ra-side-item">◎ Explorador</div>
+                  <div class="ra-side-div"></div>
+                  <div class="ra-side-item">◈ Bóveda CFDI</div>
+                  <div class="ra-side-item">‹ Colapsar</div>
+                </aside>
+                <div class="ra-content">
+                  <h3 class="ra-h">Reporte General</h3>
+                  <p class="ra-sub">Genera reportes de tus comprobantes fiscales</p>
+                  <div class="ra-rep-row">
+                    <div class="ra-f"><label>RFCs guardados</label><div class="ra-select">Seleccionar RFCs ▾</div></div>
+                    <div class="ra-f"><label>Tipo</label><div class="ra-toggle"><span class="active">Emitidos</span><span>Recibidos</span></div></div>
+                  </div>
+                  <label style="display:block;font-size:.58rem;color:var(--muted);margin-bottom:6px">Comprobantes</label>
+                  <div class="ra-comp-grid">
+                    <div class="ra-comp"><b>0</b><span>Ingreso</span></div>
+                    <div class="ra-comp"><b>0</b><span>Egreso</span></div>
+                    <div class="ra-comp"><b>0</b><span>Traslado</span></div>
+                    <div class="ra-comp"><b>0</b><span>Nómina</span></div>
+                    <div class="ra-comp total"><b>0</b><span>Facturas</span></div>
+                    <div class="ra-comp total"><b>0</b><span>Retenciones</span></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -436,22 +520,46 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
 
           <article class="benefit-slide">
             <div class="benefit-copy">
-              <div class="k">03 · LoginSAT + Bóveda</div>
-              <h3>Organiza tus accesos y tus comprobantes.</h3>
-              <p>Trabaja con un catálogo de contribuyentes y una bóveda para mantener localizados tus archivos.</p>
+              <div class="k">03 · LoginSAT</div>
+              <h3>Un catálogo con todas tus credenciales.</h3>
+              <p>Administra el acceso por RFC de cada contribuyente, con contraseña CIEC o e.firma, desde una sola pantalla.</p>
               <div class="feature-list">
-                <div class="feature"><div class="ficon">⌁</div><div><b>Catálogo por RFC</b><span>Administra credenciales y contribuyentes.</span></div></div>
-                <div class="feature"><div class="ficon">◈</div><div><b>Bóveda CFDI</b><span>Importa, exporta y reconfigura la ubicación.</span></div></div>
-                <div class="feature"><div class="ficon">⌕</div><div><b>Consultas y explorador</b><span>Accede a los portales desde la aplicación.</span></div></div>
+                <div class="feature"><div class="ficon">⌁</div><div><b>Catálogo de credenciales</b><span>Busca por RFC o razón social.</span></div></div>
+                <div class="feature"><div class="ficon">◆</div><div><b>CIEC y e.firma</b><span>Distingue el tipo y la vigencia de cada acceso.</span></div></div>
+                <div class="feature"><div class="ficon">✎</div><div><b>Edición rápida</b><span>Agrega, edita o elimina credenciales al instante.</span></div></div>
               </div>
             </div>
-            <div class="mini-window">
-              <div class="mini-bar"><i></i><i></i><i></i><span>XMLFlash — LoginSAT</span></div>
-              <div class="mini-body">
-                <div class="mini-list">
-                  <div class="mini-list-item">⌁ XAXX010101000 · e.firma <em>ACTIVO</em></div>
-                  <div class="mini-list-item">⌁ GODE561231GR8 · Contraseña <em>ACTIVO</em></div>
-                  <div class="mini-list-item">◈ Bóveda CFDI · comprobantes <em>AL DÍA</em></div>
+            <div class="ra-shell">
+              <div class="ra-top">
+                <div class="ra-brand"><span class="ra-logo">▤</span>XMLFlash</div>
+                <div class="ra-top-actions">
+                  <span class="ra-pill-btn">⊕ Navegador</span>
+                  <span class="ra-pill-btn">◔ LoginSAT</span>
+                  <span class="ra-pill-btn exit">⏻ Salir</span>
+                </div>
+              </div>
+              <div class="ra-body">
+                <aside class="ra-side">
+                  <div class="ra-side-item">▤ Documentos</div>
+                  <div class="ra-side-item">◔ Reportes</div>
+                  <div class="ra-side-item active">⌁ LoginSAT</div>
+                  <div class="ra-side-item">⌕ Consultas</div>
+                  <div class="ra-side-item">◎ Explorador</div>
+                  <div class="ra-side-div"></div>
+                  <div class="ra-side-item">◈ Bóveda CFDI</div>
+                  <div class="ra-side-item">‹ Colapsar</div>
+                </aside>
+                <div class="ra-content">
+                  <h3 class="ra-h">LoginSAT</h3>
+                  <p class="ra-sub">Catálogo de credenciales</p>
+                  <table class="ra-table">
+                    <thead><tr><th>RFC</th><th>Razón social</th><th>Tipo</th><th>Vigencia</th></tr></thead>
+                    <tbody>
+                      <tr><td>XAXX010101000</td><td>Empresa Ejemplo SA de CV</td><td><span class="ra-pill-tag ciec">CIEC</span></td><td>—</td></tr>
+                      <tr><td>MEXA8501012Q3</td><td>María Elena Ximénez</td><td><span class="ra-pill-tag efirma">EFIRMA</span></td><td>30/12/2026</td></tr>
+                      <tr><td>JABC850101HDF</td><td>Juan Antonio Bravo</td><td><span class="ra-pill-tag ciec">CIEC</span></td><td>—</td></tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -482,8 +590,8 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
 
     <div class="flow-grid">
       <div class="flow-column">
-        <article class="flow-card"><span class="num">01</span><h3>Conexión</h3><p>XMLFLASH se conecta con el <strong>portal del SAT</strong> para realizar el proceso de consulta y descarga.</p></article>
-        <article class="flow-card"><span class="num">02</span><h3>Descarga masiva</h3><p>Los comprobantes se procesan sin tener que descargar cada archivo de forma manual.</p></article>
+        <article class="flow-card"><span class="num">01</span><h3>Conexión</h3><p>XMLFLASH conecta <strong>directamente</strong> el portal del SAT con tu equipo, con <strong>doble cifrado</strong> y sin pasar por servidores externos.</p></article>
+        <article class="flow-card"><span class="num">02</span><h3>Descarga masiva</h3><p>Los comprobantes se procesan sin descargar cada archivo de forma manual, alternando entre distintos RFC (<strong>MultiRFC</strong>) sin interrumpir el proceso.</p></article>
       </div>
 
       <div class="flow-center" aria-label="Animación de descarga de XML">
@@ -514,32 +622,34 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
     </div>
 
     <div class="browser-section">
-      <div class="browser-mock">
-        <div class="browser-top">
-          <button class="browser-btn">←</button><button class="browser-btn">→</button><button class="browser-btn">↻</button>
-          <div class="browser-url">https://www.sat.gob.mx</div>
-          <span class="browser-live">● ESTABLE</span>
+      <div class="browser-mock" aria-label="Vista previa del panel lateral del navegador integrado">
+        <div class="bm-row">
+          <button class="bm-icon-btn">☰</button>
+          <span class="bm-pill">⌂ Inicio</span>
+          <span class="bm-pill">🔑 Credenciales</span>
+          <span class="bm-pill out">⏻ Cerrar sesión</span>
         </div>
-        <div class="browser-content">
-          <aside class="browser-menu">
-            <div class="menu-title">Accesos SAT</div>
-            <div class="portal-link active"><span>⌂</span>Inicio</div>
-            <div class="portal-link"><span>▣</span>Buzón tributario</div>
-            <div class="portal-link"><span>▤</span>Facturación SAT</div>
-            <div class="portal-link"><span>▥</span>Reimprime acuses</div>
-            <div class="portal-link"><span>✓</span>Opinión de cumplimiento</div>
-            <div class="portal-link"><span>▦</span>Declaraciones</div>
-            <div class="portal-link"><span>↓</span>Descarga alternativa</div>
-          </aside>
-          <div class="sat-screen">
-            <div class="sat-banner"><b>Portal del SAT</b><small>Acceso desde el navegador integrado</small></div>
-            <div class="sat-box">
-              <div class="sat-row"><span>Sesión</span><strong class="sat-ok">Preparada</strong></div>
-              <div class="sat-row"><span>Captcha</span><strong class="sat-ok">Resuelto</strong></div>
-              <div class="sat-row"><span>Credencial</span><strong class="sat-ok">Configurada</strong></div>
-              <div class="sat-row"><span>Conexión</span><strong class="sat-ok">Estable</strong></div>
-            </div>
-          </div>
+        <div class="bm-dropdown">
+          <ul>
+            <li>↪ Login web</li>
+            <li>▣ Buzón tributario</li>
+            <li>▤ Facturación SAT</li>
+            <li>▥ Reimprimir acuses de RFC</li>
+            <li>✓ Opinión de cumplimiento</li>
+            <li>▦ Declaración provisional o definitiva</li>
+            <li class="has-sub">⬇ Descarga alternativa ›</li>
+          </ul>
+        </div>
+        <div class="bm-row">
+          <button class="bm-icon-btn">←</button>
+          <button class="bm-icon-btn">→</button>
+          <button class="bm-icon-btn">↻</button>
+          <div class="bm-url">https://www.sat.gob.mx</div>
+          <button class="bm-icon-btn">↗</button>
+        </div>
+        <div class="browser-frame-mock">
+          <span class="bf-icon">🗎</span>
+          <span>Vista en vivo del portal del SAT, dentro de la aplicación</span>
         </div>
       </div>
 
@@ -622,6 +732,16 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
         </ul>
         <a class="btn btn-primary" style="width:100%" href="mailto:contacto+compraxmlflash@nexxotek.com">Solicitar acceso a la tienda</a>
         <p class="price-note">Aplican descuentos por volumen.<br>contacto+compraxmlflash@nexxotek.com</p>
+        <div class="price-functions">
+          <div class="pf-label">Incluye dentro de la aplicación</div>
+          <div class="pf-chips">
+            <span class="pf-chip">▤ Documentos</span>
+            <span class="pf-chip">◔ Reportes</span>
+            <span class="pf-chip">⌁ LoginSAT</span>
+            <span class="pf-chip">◈ Bóveda CFDI</span>
+            <span class="pf-chip">☁ Navegador SAT</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -638,6 +758,59 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
     <div class="video-card">
       <span class="video-label">XMLFLASH · DEMO</span>
       <button class="play" aria-label="Reproducir demo">▶</button>
+    </div>
+  </div>
+</section>
+
+<section id="conocelo">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Conócelo</div>
+      <h2>De la descarga a la activación</h2>
+      <p>Tres pasos, sin fricción, para tener XMLFLASH funcionando en tu equipo.</p>
+    </div>
+
+    <div class="steps-wrap">
+      <div class="steps-track-wrap">
+        <div class="steps-track" id="stepsTrack">
+
+          <div class="step-slide">
+            <div class="step-num">1</div>
+            <span class="step-tag">Proceso de descarga</span>
+            <h4>Solicita tu enlace</h4>
+            <p>Envía un correo solicitando el enlace de descarga. Lo recibirás de forma inmediata y automática; revisa spam si no lo localizas.</p>
+            <code>contacto+descargaxmlflash@nexxotek.com</code>
+            <a href="#" class="btn btn-light">Solicitar enlace de descarga</a>
+          </div>
+
+          <div class="step-slide">
+            <div class="step-num">2</div>
+            <span class="step-tag">Guía de instalación</span>
+            <h4>Instala y configura</h4>
+            <p>Una guía paso a paso te ayuda a instalar y configurar XMLFLASH correctamente en tu sistema.</p>
+            <a href="#" class="btn btn-primary">↓ Descargar guía paso a paso</a>
+          </div>
+
+          <div class="step-slide">
+            <div class="step-num">3</div>
+            <span class="step-tag">Adquiere un demo</span>
+            <h4>Activa tu versión demo</h4>
+            <p>Una guía completa te muestra desde la descarga hasta la activación de la demo y cómo aprovechar al máximo el periodo de prueba.</p>
+            <a href="#" class="btn btn-primary">↓ Descargar guía de activación</a>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="steps-nav">
+        <button class="arrow" id="stepsPrev" aria-label="Paso anterior">←</button>
+        <div class="dots" id="stepsDots">
+          <button class="dot-btn active" data-slide="0"></button>
+          <button class="dot-btn" data-slide="1"></button>
+          <button class="dot-btn" data-slide="2"></button>
+        </div>
+        <button class="arrow" id="stepsNext" aria-label="Siguiente paso">→</button>
+      </div>
     </div>
   </div>
 </section>
@@ -703,6 +876,29 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
     dots.forEach((d,n)=>d.classList.toggle('active',n===index));
   }
   function start(){ timer=setInterval(()=>goTo(index+1),6500); }
+  function stop(){ clearInterval(timer); }
+  prev.addEventListener('click',()=>goTo(index-1));
+  next.addEventListener('click',()=>goTo(index+1));
+  dots.forEach(d=>d.addEventListener('click',()=>goTo(Number(d.dataset.slide))));
+  track.parentElement.addEventListener('mouseenter',stop);
+  track.parentElement.addEventListener('mouseleave',start);
+  start();
+})();
+
+/* Carrusel Conócelo */
+(() => {
+  const track = document.getElementById('stepsTrack');
+  const dots = [...document.querySelectorAll('#stepsDots .dot-btn')];
+  const prev = document.getElementById('stepsPrev');
+  const next = document.getElementById('stepsNext');
+  let index = 0, timer;
+
+  function goTo(i){
+    index = (i + dots.length) % dots.length;
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((d,n)=>d.classList.toggle('active',n===index));
+  }
+  function start(){ timer=setInterval(()=>goTo(index+1),6000); }
   function stop(){ clearInterval(timer); }
   prev.addEventListener('click',()=>goTo(index-1));
   next.addEventListener('click',()=>goTo(index+1));
