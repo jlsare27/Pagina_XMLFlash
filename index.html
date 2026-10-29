@@ -189,27 +189,24 @@ section{padding:92px 0}
 .flow-card h3{font-size:1rem;margin-bottom:6px}.flow-card p{font-size:.8rem;color:var(--muted)}
 .flow-card strong{color:var(--violet-deep)}
 .flow-center{
-  background:var(--bg-deep);border-radius:24px;padding:23px 20px;position:relative;overflow:hidden;
-  min-height:390px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  background:var(--bg-deep);border-radius:24px;padding:18px 14px;position:relative;overflow:hidden;
+  min-height:390px;display:flex;align-items:center;justify-content:center;
   box-shadow:0 28px 70px rgba(23,22,58,.24)
 }
-.flow-center:before,.flow-center:after{
-  content:"";position:absolute;width:180px;height:180px;border:1px solid rgba(98,102,240,.22);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)
-}
-.flow-center:after{width:280px;height:280px;border-color:rgba(244,121,29,.09)}
-.flow-source,.flow-destination{position:relative;z-index:2;width:100%;padding:12px 14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);border-radius:12px}
-.flow-source b,.flow-destination b{display:block;color:#fff;font-size:.78rem}.flow-source span,.flow-destination span{color:var(--dark-muted);font-size:.65rem}
-.flow-lane{position:relative;z-index:2;width:100%;height:220px}
-.packet{
-  position:absolute;left:50%;top:0;transform:translateX(-50%);
-  padding:6px 9px;border-radius:7px;background:rgba(244,121,29,.14);border:1px solid rgba(244,121,29,.4);
-  color:#FFC37A;font:500 .58rem 'JetBrains Mono';opacity:0;animation:downloadPacket 3.4s linear infinite
-}
-.packet:nth-child(1){left:24%;animation-delay:0s}.packet:nth-child(2){left:50%;animation-delay:1.1s}.packet:nth-child(3){left:76%;animation-delay:2.2s}
-@keyframes downloadPacket{0%{top:5px;opacity:0;transform:translate(-50%,-8px)}12%{opacity:1}82%{opacity:1}100%{top:202px;opacity:0;transform:translate(-50%,8px)}}
-.flow-arrow{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:1.4rem;color:rgba(255,255,255,.18)}
-.flow-destination{margin-top:auto}
-.flow-destination .check{color:#33D9B2}
+.flow-center:before{content:"";position:absolute;inset:0;background:radial-gradient(250px 210px at 50% 48%,rgba(98,102,240,.26),transparent 72%)}
+.sec-svg{position:relative;width:100%;max-width:410px;height:auto;display:block}
+.sec-svg text{font-family:'IBM Plex Sans',sans-serif}
+.sec-svg .sv-h{font-family:'Space Grotesk',sans-serif}
+.sec-svg .sv-m{font-family:'JetBrains Mono',monospace}
+.pk{opacity:0;animation:secPacket 3.6s linear infinite}
+.pk2{animation-delay:1.2s}.pk3{animation-delay:2.4s}
+@keyframes secPacket{0%{transform:translateY(0);opacity:0}10%{opacity:1}85%{opacity:1}100%{transform:translateY(232px);opacity:0}}
+.sv-dash{stroke-dasharray:3 7;animation:secDash 1.2s linear infinite}
+@keyframes secDash{to{stroke-dashoffset:-20}}
+.sv-lock{transform-box:fill-box;transform-origin:center;animation:secPulse 2.4s ease-in-out infinite}
+.sv-lock.l2{animation-delay:1.2s}
+@keyframes secPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
+@media(prefers-reduced-motion:reduce){.pk{opacity:1}.pk2{transform:translateY(78px)}.pk3{transform:translateY(156px)}}
 @media(max-width:980px){.flow-grid{grid-template-columns:1fr}.flow-center{max-width:520px;width:100%;margin:auto}.flow-column{display:grid;grid-template-columns:1fr 1fr}.flow-card{height:100%}}
 @media(max-width:650px){.flow-column{grid-template-columns:1fr}}
 
@@ -363,7 +360,7 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
       </div>
       <div class="hero-proof">
         <div><b>+20,000</b><span>XML por día y por RFC</span></div>
-        <div><b>2</b><span>plataformas</span></div>
+        <div><b>3</b><span>plataformas</span></div>
         <div><b>RFC</b><span>ilimitados por licencia</span></div>
       </div>
       <div class="platform-row" aria-label="Disponible para Windows, macOS y Linux">
@@ -523,15 +520,55 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
         <article class="flow-card"><span class="num">02</span><h3>Descarga masiva</h3><p>Los comprobantes se procesan sin descargar cada archivo de forma manual, alternando entre distintos RFC (<strong>MultiRFC</strong>) sin interrumpir el proceso.</p></article>
       </div>
 
-      <div class="flow-center" aria-label="Animación de descarga de XML">
-        <div class="flow-source"><b>☁ Portal del SAT</b><span>Origen de los comprobantes fiscales</span></div>
-        <div class="flow-lane">
-          <div class="flow-arrow">↓</div>
-          <span class="packet">factura.xml</span>
-          <span class="packet">nomina.xml</span>
-          <span class="packet">pago.xml</span>
-        </div>
-        <div class="flow-destination"><b><span class="check">✓</span> Bóveda CFDI</b><span>Archivos organizados y disponibles para consulta</span></div>
+      <div class="flow-center">
+        <svg class="sec-svg" viewBox="0 0 400 432" role="img" aria-label="Conexión directa entre el portal del SAT y tu equipo, con doble cifrado y sin servidores externos">
+          <!-- túnel: capa de cifrado 2 (exterior) y capa 1 (interior) -->
+          <rect x="158" y="68" width="84" height="292" rx="16" fill="rgba(142,145,255,.09)" stroke="#8E91FF" stroke-width="2"/>
+          <rect x="180" y="68" width="40" height="292" rx="10" fill="rgba(51,217,178,.09)" stroke="#33D9B2" stroke-width="2"/>
+          <line class="sv-dash" x1="200" y1="76" x2="200" y2="352" stroke="#33D9B2" stroke-opacity=".5" stroke-width="2"/>
+
+          <!-- paquetes XML viajando dentro del túnel -->
+          <g class="pk pk1"><rect x="183" y="84" width="34" height="17" rx="5" fill="#F4791D"/><text class="sv-m" x="200" y="96" fill="#241506" font-size="9" font-weight="700" text-anchor="middle">XML</text></g>
+          <g class="pk pk2"><rect x="183" y="84" width="34" height="17" rx="5" fill="#F4791D"/><text class="sv-m" x="200" y="96" fill="#241506" font-size="9" font-weight="700" text-anchor="middle">XML</text></g>
+          <g class="pk pk3"><rect x="183" y="84" width="34" height="17" rx="5" fill="#F4791D"/><text class="sv-m" x="200" y="96" fill="#241506" font-size="9" font-weight="700" text-anchor="middle">XML</text></g>
+
+          <!-- etiquetas de cifrado (izquierda) -->
+          <line x1="112" y1="168" x2="158" y2="168" stroke="#8E91FF" stroke-width="1.5"/><circle cx="158" cy="168" r="3.5" fill="#8E91FF"/>
+          <g class="sv-lock l2"><circle cx="96" cy="168" r="15" fill="#2A2766" stroke="#8E91FF" stroke-width="1.5"/><g transform="translate(90.5 161.5)" stroke="#C4C6FF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="5" width="11" height="8" rx="2"/><path d="M2.5 5V3.5a3 3 0 016 0V5"/></g></g>
+          <text class="sv-h" x="96" y="196" fill="#C4C6FF" font-size="12" font-weight="600" text-anchor="middle">Cifrado 2</text>
+
+          <line x1="112" y1="262" x2="180" y2="262" stroke="#33D9B2" stroke-width="1.5"/><circle cx="180" cy="262" r="3.5" fill="#33D9B2"/>
+          <g class="sv-lock"><circle cx="96" cy="262" r="15" fill="#123F44" stroke="#33D9B2" stroke-width="1.5"/><g transform="translate(90.5 255.5)" stroke="#7DF0D4" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="5" width="11" height="8" rx="2"/><path d="M2.5 5V3.5a3 3 0 016 0V5"/></g></g>
+          <text class="sv-h" x="96" y="290" fill="#7DF0D4" font-size="12" font-weight="600" text-anchor="middle">Cifrado 1</text>
+
+          <!-- servidores externos: descartados (derecha) -->
+          <g opacity=".62">
+            <rect x="272" y="130" width="116" height="92" rx="14" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-dasharray="5 5"/>
+            <g fill="none" stroke="#ABAFEA" stroke-width="1.8" stroke-linejoin="round"><rect x="305" y="142" width="50" height="14" rx="3"/><rect x="305" y="160" width="50" height="14" rx="3"/></g>
+            <circle cx="312" cy="149" r="1.8" fill="#ABAFEA"/><circle cx="312" cy="167" r="1.8" fill="#ABAFEA"/>
+            <text x="330" y="200" fill="#ABAFEA" font-size="10.5" text-anchor="middle">Servidores</text>
+            <text x="330" y="213" fill="#ABAFEA" font-size="10.5" text-anchor="middle">externos</text>
+          </g>
+          <line x1="278" y1="136" x2="382" y2="216" stroke="#FF6B6B" stroke-width="3" stroke-linecap="round"/>
+          <text class="sv-h" x="330" y="242" fill="#FF9A9A" font-size="11" font-weight="600" text-anchor="middle">Sin intermediarios</text>
+
+          <!-- conexión directa -->
+          <line x1="242" y1="300" x2="272" y2="300" stroke="#33D9B2" stroke-width="1.5"/><circle cx="242" cy="300" r="3.5" fill="#33D9B2"/>
+          <rect x="272" y="286" width="116" height="28" rx="14" fill="rgba(51,217,178,.14)" stroke="#33D9B2" stroke-width="1.2"/>
+          <text class="sv-h" x="330" y="304" fill="#7DF0D4" font-size="11.5" font-weight="600" text-anchor="middle">Conexión directa</text>
+
+          <!-- nodo origen: Portal del SAT -->
+          <rect x="104" y="12" width="192" height="58" rx="14" fill="#1F1D4B" stroke="rgba(255,255,255,.2)"/>
+          <g transform="translate(122 28)" stroke="#FFC37A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M1 10L14 2l13 8"/><path d="M4 13v11M11 13v11M17 13v11M24 13v11"/><path d="M1 27h26"/></g>
+          <text class="sv-h" x="162" y="37" fill="#fff" font-size="14.5" font-weight="600">Portal del SAT</text>
+          <text x="162" y="54" fill="#ABAFEA" font-size="10.5">Origen de tus CFDI</text>
+
+          <!-- nodo destino: tu equipo -->
+          <rect x="104" y="358" width="192" height="62" rx="14" fill="#1F1D4B" stroke="#33D9B2" stroke-opacity=".7" stroke-width="1.5"/>
+          <g transform="translate(120 375)" stroke="#7DF0D4" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="1" width="26" height="17" rx="2.5"/><path d="M0 23h32"/></g>
+          <text class="sv-h" x="162" y="386" fill="#fff" font-size="14.5" font-weight="600">Tu equipo</text>
+          <text x="162" y="404" fill="#7DF0D4" font-size="10.5">✓ Bóveda CFDI</text>
+        </svg>
       </div>
 
       <div class="flow-column">
@@ -622,7 +659,7 @@ footer{background:var(--bg-deep);color:#fff;padding:58px 0 25px}
       <div class="price-card">
         <span class="price-badge">PROMOCIÓN DE BUEN FIN</span>
         <div class="price-old">$989.50</div>
-        <div class="price-new">$789.00 <span>/ licencia anual</span></div>
+        <div class="price-new">$739.00 <span>/ licencia anual</span></div>
         <div class="price-inc">
           <div class="pi-label">Incluye dentro de la aplicación</div>
           <div class="pi-grid">
